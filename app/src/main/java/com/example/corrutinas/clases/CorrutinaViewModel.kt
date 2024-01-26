@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,20 +19,37 @@ class CorrutinaViewModel : ViewModel() {
 
     private var textoCentral by mutableStateOf("")
 
+    private var estaCargando by mutableStateOf(false)
+
+    fun estaCargando() = estaCargando
+
     fun cuantasVecesPulsado() = vecesPulsado
 
     fun fetchData(){
         vecesPulsado = vecesPulsado.plus(1)
 
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO){
-                bloqueoApp()
-                "Respuesta de la api = ${cuantasVecesPulsado()}"
+            try {
+                estaCargando = true
+                llamarApi()
+
+            }catch (e:Exception){
+                Log.i("error", e.toString())
+            }finally {
+                estaCargando = false
             }
-            textoCentral=result
-            Log.i("yo", result)
+
         }
 
+    }
+
+    suspend fun llamarApi(){
+        val result = withContext(Dispatchers.IO){
+
+            bloqueoApp()
+            "Respuesta de la api = ${cuantasVecesPulsado()}"
+        }
+        textoCentral = result
     }
 
 
