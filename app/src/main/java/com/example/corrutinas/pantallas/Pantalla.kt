@@ -24,7 +24,7 @@ fun Pantalla(pantallaViewModel: CorrutinaViewModel){
         Text(text = pantallaViewModel.textoCentral())
 
         //boton relativo a corrutinas
-        Button(onClick = { pantallaViewModel.pulsarCorrutina() }) {
+        Button(onClick = { pantallaViewModel.fetchData() }) {
             Text(text = "Llamar API")
         }
     }

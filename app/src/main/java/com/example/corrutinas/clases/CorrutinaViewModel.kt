@@ -1,11 +1,16 @@
 package com.example.corrutinas.clases
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CorrutinaViewModel : ViewModel() {
 
@@ -13,11 +18,22 @@ class CorrutinaViewModel : ViewModel() {
 
     private var vecesPulsado by mutableStateOf(0)
 
+    private var textoCentral by mutableStateOf("")
+
     fun cuantasVecesPulsado() = vecesPulsado
 
-    fun pulsarCorrutina(){
-        bloqueoApp()
+    fun fetchData(){
         vecesPulsado = vecesPulsado.plus(1)
+
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO){
+                bloqueoApp()
+                "Respuesta de la api = ${cuantasVecesPulsado()}"
+            }
+            textoCentral=result
+            Log.i("yo", result)
+        }
+
     }
 
 
@@ -26,7 +42,7 @@ class CorrutinaViewModel : ViewModel() {
     }
 
     fun textoCentral():String{
-        return if(cuantasVecesPulsado()!=0)"pulsado ${cuantasVecesPulsado()} veces" else ""
+        return textoCentral
     }
 
     fun colorActual():Color{
