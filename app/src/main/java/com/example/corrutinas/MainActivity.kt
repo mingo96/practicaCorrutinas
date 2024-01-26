@@ -10,9 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.corrutinas.clases.CorrutinaViewModel
+import com.example.corrutinas.pantallas.Pantalla
 import com.example.corrutinas.ui.theme.CorrutinasTheme
 
 class MainActivity : ComponentActivity() {
+
+    val pantallaCorrutinaViewModel = CorrutinaViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Pantalla(pantallaViewModel = pantallaCorrutinaViewModel)
                 }
             }
         }
